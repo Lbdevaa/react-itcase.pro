@@ -83,17 +83,48 @@
 
 .summary {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 20px;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  font-size: 18px;
 }
 
-.total {
-  font-size: 22px;
+.totals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.row dt,
+.row dd {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.discount dd {
+  color: var(--color-danger);
+}
+
+.totalRow {
+  margin-top: 4px;
+  font-size: 20px;
+}
+
+.totalRow dt,
+.totalRow dd {
+  color: var(--color-text);
   font-weight: 600;
 }
 

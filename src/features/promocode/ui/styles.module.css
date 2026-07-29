@@ -1,0 +1,49 @@
+.form {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) auto;
+  align-items: end;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--color-danger);
+  font-size: 14px;
+}
+
+.applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.code {
+  margin: 0;
+  font-weight: 600;
+}
+
+.description {
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 720px) {
+  .form {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+}

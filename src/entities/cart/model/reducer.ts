@@ -12,7 +12,7 @@ function isSameItem(item: CartItemKey, other: CartItemKey): boolean {
   return getCartItemKey(item) === getCartItemKey(other)
 }
 
-export const initialCartState: CartState = {items: []}
+export const initialCartState: CartState = {items: [], promocode: null}
 
 export function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
@@ -20,10 +20,11 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
       const existing = state.items.find((item) => isSameItem(item, action.payload))
 
       if (!existing) {
-        return {items: [...state.items, {...action.payload, quantity: 1}]}
+        return {...state, items: [...state.items, {...action.payload, quantity: 1}]}
       }
 
       return {
+        ...state,
         items: state.items.map((item) =>
           isSameItem(item, action.payload) ? {...item, quantity: item.quantity + 1} : item,
         ),
@@ -35,14 +36,25 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
       const quantity = Math.max(1, Math.trunc(action.payload.quantity))
 
       return {
+        ...state,
         items: state.items.map((item) =>
           isSameItem(item, action.payload) ? {...item, quantity} : item,
         ),
       }
     }
 
-    case 'remove':
-      return {items: state.items.filter((item) => !isSameItem(item, action.payload))}
+    case 'remove': {
+      const items = state.items.filter((item) => !isSameItem(item, action.payload))
+
+      // Скидка без товаров бессмысленна: пустая корзина сбрасывает и промокод.
+      return {items, promocode: items.length > 0 ? state.promocode : null}
+    }
+
+    case 'applyPromocode':
+      return {...state, promocode: action.payload.code}
+
+    case 'removePromocode':
+      return {...state, promocode: null}
 
     case 'clear':
       return initialCartState

@@ -26,25 +26,30 @@ function isCartItem(value: unknown): value is CartItem {
   )
 }
 
+const EMPTY_CART: CartState = {items: [], promocode: null}
+
 export function readCart(): CartState {
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY)
 
     if (!raw) {
-      return {items: []}
+      return EMPTY_CART
     }
 
     const parsed: unknown = JSON.parse(raw)
 
     if (typeof parsed !== 'object' || parsed === null) {
-      return {items: []}
+      return EMPTY_CART
     }
 
-    const items = (parsed as {items?: unknown}).items
+    const {items, promocode} = parsed as {items?: unknown; promocode?: unknown}
 
-    return {items: Array.isArray(items) ? items.filter(isCartItem) : []}
+    return {
+      items: Array.isArray(items) ? items.filter(isCartItem) : [],
+      promocode: typeof promocode === 'string' ? promocode : null,
+    }
   } catch {
-    return {items: []}
+    return EMPTY_CART
   }
 }
 
