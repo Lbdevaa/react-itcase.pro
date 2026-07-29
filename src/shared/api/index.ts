@@ -8,7 +8,7 @@ import * as api from 'services/api'
 
 import type {Product, Size} from './types'
 
-export type {Category, Product, ProductColor, Size} from './types'
+export type {Product, ProductColor, Size} from './types'
 
 export const getProducts = api.getProducts as () => Promise<Product[]>
 

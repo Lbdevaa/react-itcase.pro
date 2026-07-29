@@ -12,7 +12,7 @@ function isSameItem(item: CartItemKey, other: CartItemKey): boolean {
   return getCartItemKey(item) === getCartItemKey(other)
 }
 
-export const initialCartState: CartState = {items: [], promocode: null}
+const initialCartState: CartState = {items: [], promocode: null}
 
 export function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {

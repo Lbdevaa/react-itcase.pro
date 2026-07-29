@@ -5,7 +5,7 @@
 
 type ClassValue = string | false | null | undefined
 
-/** cn(styles.item, selected && styles.selected) → "item item_selected" */
+/** cn(styles.item, selected && styles.selected) → "item selected" */
 export function cn(...classes: ClassValue[]): string {
   return classes.filter(Boolean).join(' ')
 }

@@ -22,9 +22,17 @@ export function ProductsPage() {
   // Поле ввода реагирует мгновенно, а пересчёт списка ждёт паузы в наборе.
   const debouncedQuery = useDebouncedValue(filters.query)
 
+  // Применённые фильтры отстают от введённых на время дебаунса. Пустое состояние
+  // описываем именно ими, иначе сразу после очистки поиска список ещё пуст,
+  // а текст уже сообщает, что каталог пуст.
+  const appliedFilters = useMemo(
+    () => ({...filters, query: debouncedQuery}),
+    [filters, debouncedQuery],
+  )
+
   const visibleProducts = useMemo(
-    () => applyProductFilters(products ?? [], {...filters, query: debouncedQuery}),
-    [products, filters, debouncedQuery],
+    () => applyProductFilters(products ?? [], appliedFilters),
+    [products, appliedFilters],
   )
 
   return (
@@ -45,9 +53,9 @@ export function ProductsPage() {
 
       {!loading && !error && visibleProducts.length === 0 ? (
         <StateMessage
-          title={isFiltersEmpty(filters) ? 'Товаров пока нет' : 'Ничего не найдено'}
+          title={isFiltersEmpty(appliedFilters) ? 'Товаров пока нет' : 'Ничего не найдено'}
           description={
-            isFiltersEmpty(filters)
+            isFiltersEmpty(appliedFilters)
               ? 'Каталог пуст.'
               : 'Попробуйте изменить поисковый запрос или снять фильтры.'
           }

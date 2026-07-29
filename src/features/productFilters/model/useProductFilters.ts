@@ -13,6 +13,14 @@ function parseSort(value: string | null): SortOrder | null {
   return value === 'asc' || value === 'desc' ? value : null
 }
 
+function parseFilters(params: URLSearchParams): ProductFiltersValue {
+  return {
+    query: params.get(PARAM.query) ?? '',
+    inStockOnly: params.get(PARAM.inStock) === '1',
+    sort: parseSort(params.get(PARAM.sort)),
+  }
+}
+
 /**
  * Фильтры живут в URL: ссылку со списком можно переслать, а перезагрузка страницы
  * не сбрасывает состояние. Значения по умолчанию в строку запроса не пишутся.
@@ -20,21 +28,15 @@ function parseSort(value: string | null): SortOrder | null {
 export function useProductFilters() {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const filters = useMemo<ProductFiltersValue>(
-    () => ({
-      query: searchParams.get(PARAM.query) ?? '',
-      inStockOnly: searchParams.get(PARAM.inStock) === '1',
-      sort: parseSort(searchParams.get(PARAM.sort)),
-    }),
-    [searchParams],
-  )
+  const filters = useMemo(() => parseFilters(searchParams), [searchParams])
 
   const setFilters = useCallback(
     (next: Partial<ProductFiltersValue>) => {
-      const merged = {...filters, ...next}
-
       setSearchParams(
         (params) => {
+          // Предыдущие значения читаем из актуальной строки запроса, а не из замыкания:
+          // иначе два обновления в одном тике затёрли бы друг друга.
+          const merged = {...parseFilters(params), ...next}
           const updated = new URLSearchParams(params)
 
           if (merged.query.trim()) {
@@ -60,7 +62,7 @@ export function useProductFilters() {
         {replace: true},
       )
     },
-    [filters, setSearchParams],
+    [setSearchParams],
   )
 
   return {filters, setFilters}

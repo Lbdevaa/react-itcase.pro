@@ -9,11 +9,6 @@ export type Size = {
   number: number
 }
 
-export type Category = {
-  id: number
-  name: string
-}
-
 export type ProductColor = {
   id: number
   name: string

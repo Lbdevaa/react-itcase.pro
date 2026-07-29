@@ -9,12 +9,6 @@ export type ProductFiltersValue = {
   sort: SortOrder | null
 }
 
-export const EMPTY_FILTERS: ProductFiltersValue = {
-  query: '',
-  inStockOnly: false,
-  sort: null,
-}
-
 export function isFiltersEmpty(filters: ProductFiltersValue): boolean {
   return !filters.query.trim() && !filters.inStockOnly && filters.sort === null
 }

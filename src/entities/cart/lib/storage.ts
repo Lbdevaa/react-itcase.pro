@@ -22,7 +22,8 @@ function isCartItem(value: unknown): value is CartItem {
     typeof item.sizeName === 'string' &&
     typeof item.priceCents === 'number' &&
     typeof item.quantity === 'number' &&
-    item.quantity >= 1
+    item.quantity >= 1 &&
+    (item.image === undefined || typeof item.image === 'string')
   )
 }
 
