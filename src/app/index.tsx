@@ -1,3 +1,6 @@
+import {withProviders} from './providers'
+import {AppRoutes} from './routes'
+
 export default function App() {
-  return <div className="App" />
+  return withProviders(<AppRoutes />)
 }

@@ -1,0 +1,5 @@
+.main {
+  width: min(100%, var(--layout-width));
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}

@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  min-height: 20px;
+}

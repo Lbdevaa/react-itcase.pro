@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.back {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.back:hover {
+  color: var(--color-text);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 460px) 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brand {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+}
+
+.price {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
