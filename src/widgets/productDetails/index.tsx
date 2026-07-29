@@ -12,12 +12,13 @@ import {formatMoney, parsePrice} from 'shared/lib/money'
 
 import styles from './styles.module.css'
 
-type ProductViewProps = {
+type ProductDetailsProps = {
   product: Product
   sizes: Size[]
 }
 
-export function ProductView({product, sizes}: ProductViewProps) {
+/** Композиция карточки товара: галерея, выбор цвета и размера, добавление в корзину. */
+export function ProductDetails({product, sizes}: ProductDetailsProps) {
   const [pickedColorId, setPickedColorId] = useState<number | null>(null)
   const [pickedSizeId, setPickedSizeId] = useState<number | null>(null)
 

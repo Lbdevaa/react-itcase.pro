@@ -6,8 +6,7 @@ import {useAsync} from 'shared/lib/useAsync'
 import {Button} from 'shared/ui/button'
 import {Spinner} from 'shared/ui/spinner'
 import {StateMessage} from 'shared/ui/stateMessage'
-
-import {ProductView} from './ui/productView'
+import {ProductDetails} from 'widgets/productDetails'
 
 export function ProductPage() {
   const {productId} = useParams()
@@ -39,5 +38,5 @@ export function ProductPage() {
   }
 
   // key сбрасывает выбор цвета и размера при переходе к другому товару.
-  return <ProductView key={product.id} product={product} sizes={sizes ?? []} />
+  return <ProductDetails key={product.id} product={product} sizes={sizes ?? []} />
 }

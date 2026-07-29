@@ -1,7 +1,8 @@
+import {Checkbox} from 'shared/ui/checkbox'
 import {Input} from 'shared/ui/input'
 import {Select} from 'shared/ui/select'
 
-import type {ProductFiltersValue, SortOrder} from '../model'
+import type {ProductFiltersValue, SortOrder} from '../model/filters'
 
 import styles from './styles.module.css'
 
@@ -38,14 +39,12 @@ export function ProductFilters({value, onChange}: ProductFiltersProps) {
         />
       </label>
 
-      <label className={styles.checkbox}>
-        <input
-          type="checkbox"
-          checked={value.inStockOnly}
-          onChange={(event) => onChange({inStockOnly: event.target.checked})}
-        />
-        <span>Только в наличии</span>
-      </label>
+      <Checkbox
+        className={styles.checkbox}
+        label="Только в наличии"
+        checked={value.inStockOnly}
+        onChange={(event) => onChange({inStockOnly: event.target.checked})}
+      />
     </div>
   )
 }

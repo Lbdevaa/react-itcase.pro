@@ -1,7 +1,7 @@
 import {useCallback, useMemo} from 'react'
 import {useSearchParams} from 'react-router-dom'
 
-import type {ProductFiltersValue, SortOrder} from './model'
+import type {ProductFiltersValue, SortOrder} from './filters'
 
 const PARAM = {
   query: 'q',
