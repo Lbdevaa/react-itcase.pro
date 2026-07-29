@@ -15,10 +15,27 @@ export function ProductPage() {
     () => getProduct(productId ?? ''),
     [productId],
   )
-  const {data: sizes, loading: sizesLoading} = useAsync(getSizes, [])
+  const {data: sizes, loading: sizesLoading, error: sizesError} = useAsync(getSizes, [])
 
   if (productLoading || sizesLoading) {
     return <Spinner />
+  }
+
+  // Без справочника размеров выбрать размер нельзя, а значит и купить товар:
+  // честнее показать ошибку, чем страницу с пустым блоком размеров.
+  if (sizesError) {
+    return (
+      <StateMessage
+        tone="error"
+        title="Не удалось загрузить размеры"
+        description="Обновите страницу — возможно, это временный сбой."
+        action={
+          <Link to={ROUTES.products}>
+            <Button variant="secondary">Вернуться к каталогу</Button>
+          </Link>
+        }
+      />
+    )
   }
 
   // API реджектится и на отсутствующий товар, и на сбой — различить их нельзя,

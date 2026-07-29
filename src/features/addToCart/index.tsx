@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
 import {useCart} from 'entities/cart'
 import type {Product, ProductColor, Size} from 'shared/api'
@@ -17,6 +17,11 @@ type AddToCartProps = {
 export function AddToCart({product, color, size}: AddToCartProps) {
   const {dispatch} = useCart()
   const [justAdded, setJustAdded] = useState(false)
+  const hintTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  // Таймер подсказки живёт дольше клика: его нужно снимать при уходе со страницы
+  // и при повторном добавлении, иначе подсказка погаснет раньше времени.
+  useEffect(() => () => clearTimeout(hintTimer.current), [])
 
   const disabled = !color || !size
 
@@ -40,7 +45,8 @@ export function AddToCart({product, color, size}: AddToCartProps) {
     })
 
     setJustAdded(true)
-    setTimeout(() => setJustAdded(false), 1500)
+    clearTimeout(hintTimer.current)
+    hintTimer.current = setTimeout(() => setJustAdded(false), 1500)
   }
 
   return (
