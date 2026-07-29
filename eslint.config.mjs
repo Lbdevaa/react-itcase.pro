@@ -6,21 +6,18 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 /**
- * Слои FSD, от верхнего к нижнему. Индекс в массиве задаёт направление импортов:
- * слой может зависеть только от слоёв правее себя.
+ * Слои FSD, от верхнего к нижнему. Позиция в массиве задаёт направление импортов:
+ * слой видит только слои правее себя.
  */
 const LAYERS = ['app', 'pages', 'widgets', 'features', 'entities', 'shared']
 
-const layerElements = LAYERS.map((layer) => ({
-  type: layer,
-  pattern: `src/${layer}/*`,
-  capture: ['slice'],
-}))
+/** Слои, у которых наружу торчит только публичный API слайса. */
+const ENCAPSULATED = ['pages', 'widgets', 'features', 'entities']
 
-const layerRules = LAYERS.map((layer, index) => ({
-  from: layer,
-  allow: LAYERS.slice(index + 1),
-}))
+const downwardPolicies = LAYERS.map((layer, index) => ({
+  from: {element: {type: layer}},
+  allow: {to: {element: {types: {anyOf: LAYERS.slice(index + 1)}}}},
+})).filter((policy) => policy.allow.to.element.types.anyOf.length > 0)
 
 export default tseslint.config(
   {ignores: ['dist', 'node_modules', 'build']},
@@ -38,38 +35,48 @@ export default tseslint.config(
       boundaries,
     },
     settings: {
+      // Резолвер нужен, чтобы импорты по алиасам (`entities/product`) сопоставлялись со слоями.
+      'import/resolver': {typescript: {project: './tsconfig.app.json'}},
       'boundaries/include': ['src/**/*'],
       'boundaries/elements': [
-        ...layerElements,
-        // Псевдо-API из задания. Обращаться к нему разрешено только через shared/api.
-        {type: 'services', pattern: 'src/services/*', mode: 'file'},
+        // app — единый элемент: слоя из слайсов там нет, только композиция приложения.
+        {type: 'app', pattern: 'src/app'},
+        ...LAYERS.slice(1).map((layer) => ({
+          type: layer,
+          pattern: `src/${layer}/*`,
+          capture: ['slice'],
+        })),
+        // Псевдо-API из задания: обращаться к нему разрешено только через shared/api.
+        {type: 'services', pattern: 'src/services'},
       ],
     },
     rules: {
       ...reactHooks.configs['recommended-latest'].rules,
       ...reactRefresh.configs.vite.rules,
 
-      // Импорт только вниз по слоям. Слайсы одного слоя друг друга не видят.
-      'boundaries/element-types': [
+      'boundaries/dependencies': [
         'error',
         {
           default: 'disallow',
-          rules: [
-            ...layerRules,
-            {from: 'shared', allow: ['shared', 'services']},
-          ],
-        },
-      ],
-
-      // Внутренности слайса наружу не торчат — только публичный API.
-      'boundaries/entry-point': [
-        'error',
-        {
-          default: 'disallow',
-          rules: [
-            {target: ['app', 'shared'], allow: '**'},
-            {target: ['pages', 'widgets', 'features', 'entities'], allow: 'index.{ts,tsx}'},
-            {target: ['services'], allow: '*.js'},
+          policies: [
+            // Импорт только вниз по слоям; слайсы одного слоя друг друга не видят.
+            ...downwardPolicies,
+            // shared замкнут на себя и на псевдо-API.
+            {
+              from: {element: {type: 'shared'}},
+              allow: {to: {element: {types: {anyOf: ['shared', 'services']}}}},
+            },
+            // Внутренности слайса наружу не торчат — только index.
+            {
+              disallow: {
+                to: {
+                  element: {
+                    types: {anyOf: ENCAPSULATED},
+                    fileInternalPath: '!index.{ts,tsx}',
+                  },
+                },
+              },
+            },
           ],
         },
       ],

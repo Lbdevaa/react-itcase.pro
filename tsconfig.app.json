@@ -27,8 +27,18 @@
     "noUncheckedSideEffectImports": true,
 
     /* Импорты по слоям: `entities/product` вместо `../../entities/product`.
-       Зеркалится в resolve.alias внутри vite.config.ts. */
-    "baseUrl": "./src"
+       Зеркалится в resolve.alias внутри vite.config.ts.
+       Без baseUrl — в TypeScript 6 он объявлен устаревшим. */
+    "paths": {
+      "app": ["./src/app"],
+      "app/*": ["./src/app/*"],
+      "pages/*": ["./src/pages/*"],
+      "widgets/*": ["./src/widgets/*"],
+      "features/*": ["./src/features/*"],
+      "entities/*": ["./src/entities/*"],
+      "shared/*": ["./src/shared/*"],
+      "services/*": ["./src/services/*"]
+    }
   },
   "include": ["src"]
 }

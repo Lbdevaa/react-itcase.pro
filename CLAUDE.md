@@ -19,7 +19,7 @@ npm run lint       # ESLint, включая правила границ слоё
 
 ## Стек
 
-React 18, TypeScript, Vite, react-router-dom v6, CSS Modules. Состояние корзины — `Context` +
+React 19, TypeScript, Vite, react-router-dom v7, CSS Modules. Состояние корзины — `Context` +
 `useReducer`, состояние фильтров — в URL через `useSearchParams`.
 
 Новые зависимости не добавляем без явной необходимости: задание оценивает структурность и чистоту, а не
