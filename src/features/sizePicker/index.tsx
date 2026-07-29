@@ -1,5 +1,6 @@
 import {isSizeAvailable} from 'entities/product'
 import type {ProductColor, Size} from 'shared/api'
+import {cn} from 'shared/lib/cn'
 
 import styles from './styles.module.css'
 
@@ -28,7 +29,7 @@ export function SizePicker({sizes, color, selectedSizeId, onSelect}: SizePickerP
             <button
               key={size.id}
               type="button"
-              className={[styles.item, selected && styles.selected].filter(Boolean).join(' ')}
+              className={cn(styles.item, selected && styles.selected)}
               disabled={!available}
               onClick={() => onSelect(size.id)}
               aria-pressed={selected}

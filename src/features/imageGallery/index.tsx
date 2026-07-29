@@ -1,5 +1,7 @@
 import {useState} from 'react'
 
+import {cn} from 'shared/lib/cn'
+
 import styles from './styles.module.css'
 
 type ImageGalleryProps = {
@@ -62,9 +64,7 @@ export function ImageGallery({images, alt}: ImageGalleryProps) {
             <button
               key={image}
               type="button"
-              className={[styles.thumb, index === currentIndex && styles.thumbActive]
-                .filter(Boolean)
-                .join(' ')}
+              className={cn(styles.thumb, index === currentIndex && styles.thumbActive)}
               onClick={() => setActiveIndex(index)}
               aria-label={`Изображение ${index + 1}`}
               aria-current={index === currentIndex}

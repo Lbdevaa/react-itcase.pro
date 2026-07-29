@@ -1,5 +1,7 @@
 import type {SelectHTMLAttributes} from 'react'
 
+import {cn} from 'shared/lib/cn'
+
 import styles from './styles.module.css'
 
 type SelectOption = {
@@ -13,7 +15,7 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
 
 export function Select({options, className, ...rest}: SelectProps) {
   return (
-    <select className={[styles.select, className].filter(Boolean).join(' ')} {...rest}>
+    <select className={cn(styles.select, className)} {...rest}>
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

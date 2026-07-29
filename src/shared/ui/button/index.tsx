@@ -1,5 +1,7 @@
 import type {ButtonHTMLAttributes} from 'react'
 
+import {cn} from 'shared/lib/cn'
+
 import styles from './styles.module.css'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -10,7 +12,7 @@ export function Button({variant = 'primary', className, type = 'button', ...rest
   return (
     <button
       type={type}
-      className={[styles.button, styles[variant], className].filter(Boolean).join(' ')}
+      className={cn(styles.button, styles[variant], className)}
       {...rest}
     />
   )

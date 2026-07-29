@@ -1,5 +1,6 @@
 import {isColorAvailable} from 'entities/product'
 import type {ProductColor} from 'shared/api'
+import {cn} from 'shared/lib/cn'
 
 import styles from './styles.module.css'
 
@@ -22,7 +23,7 @@ export function ColorPicker({colors, selectedColorId, onSelect}: ColorPickerProp
             <button
               key={color.id}
               type="button"
-              className={[styles.item, selected && styles.selected].filter(Boolean).join(' ')}
+              className={cn(styles.item, selected && styles.selected)}
               onClick={() => onSelect(color.id)}
               aria-pressed={selected}
             >
